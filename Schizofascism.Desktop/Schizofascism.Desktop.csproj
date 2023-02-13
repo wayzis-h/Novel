@@ -11,6 +11,10 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Backgrounds\1668865508_rimworld-kaito-57873-5523-3-15-13-alt1%281%29.png" />
+    <None Remove="Content\Backgrounds\5oRVn_Zigck.jpg" />
+    <None Remove="Content\Backgrounds\abstrakciya-linii-dizayn.jpg" />
+    <None Remove="Content\Backgrounds\RIwNRyokBfA.jpg" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
@@ -21,6 +25,9 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Backgrounds\" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />

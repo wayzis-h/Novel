@@ -1,3 +1,3 @@
 ﻿
-using var game = new Schizofascism.Desktop.Game1();
+using var game = new Schizofascism.Desktop.Novel();
 game.Run();
