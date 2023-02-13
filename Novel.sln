@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schizofascism.Desktop", "Schizofascism.Desktop\Schizofascism.Desktop.csproj", "{A4A01913-7ABD-4C42-8AC6-56E4A44AA2EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A4A01913-7ABD-4C42-8AC6-56E4A44AA2EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4A01913-7ABD-4C42-8AC6-56E4A44AA2EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4A01913-7ABD-4C42-8AC6-56E4A44AA2EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A01913-7ABD-4C42-8AC6-56E4A44AA2EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C254E653-A888-4397-8CD1-A40687F71649}
+	EndGlobalSection
+EndGlobal
