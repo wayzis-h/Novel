@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Drawing;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Schizofascism.Desktop.Graphics
 {
@@ -26,6 +27,11 @@ namespace Schizofascism.Desktop.Graphics
         public static RectangleF Inflate(this RectangleF rect, float x, float y)
         {
             return new RectangleF(rect.X - x, rect.Y - y, rect.Width + x * 2, rect.Height + y * 2);
+        }
+
+        public static RectangleF ToRectangleF(this Rectangle rect)
+        {
+            return new RectangleF(rect.X, rect.Y, rect.Width, rect.Height);
         }
     }
 }

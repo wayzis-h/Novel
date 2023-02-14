@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Schizofascism.Desktop.Graphics;
+using Schizofascism.Desktop.Graphics.Controls;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Schizofascism.Desktop
 {
@@ -25,6 +27,7 @@ namespace Schizofascism.Desktop
         private MouseState t_prewState;
         private int clicker_cnt;
         private Texture2D t_mc;
+        private Button t_exit;
 
         public Novel()
         {
@@ -66,6 +69,8 @@ namespace Schizofascism.Desktop
             t_mc = Content.Load<Texture2D>("Sprites/MainChar");
 
             _batcher = new MgPrimitiveBatcher(GraphicsDevice, t_sf_font);
+            t_exit = new Button(_batcher, new Rectangle(120, 5, 42, 20));
+            t_exit.Clicked += (s, a) => Exit();
         }
 
         protected override void Update(GameTime gameTime)
@@ -79,6 +84,8 @@ namespace Schizofascism.Desktop
                 text = (++clicker_cnt).ToString();
             }
             t_prewState = Mouse.GetState();
+
+            t_exit.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -135,6 +142,7 @@ namespace Schizofascism.Desktop
 
             //_batcher.FillCircle(new Vector2(30), 20.23f, new Color(Color.LemonChiffon, 0.4f), 10);
             _batcher.FillRoundedRect(new System.Drawing.RectangleF(10, 10, 100, 100), 25f, ((int)System.Math.Sqrt(25)), new Color(Color.LemonChiffon, 0.4f));
+            t_exit.Draw(gameTime);
             _batcher.Flush();
 
             base.Draw(gameTime);
