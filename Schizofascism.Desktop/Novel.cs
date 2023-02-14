@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Schizofascism.Desktop.Graphics;
 
 namespace Schizofascism.Desktop
 {
@@ -13,6 +14,7 @@ namespace Schizofascism.Desktop
         private SpriteBatch _spriteBatch;
 
         // Temporary variables for prototype only.
+        MgPrimitiveBatcher _batcher;
         private SpriteFont t_sf_font;
         private Texture2D t_texture;
         private Vector2 t_windowSize;
@@ -27,9 +29,11 @@ namespace Schizofascism.Desktop
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+#if !DEBUG
             _graphics.IsFullScreen = true;
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+#endif
         }
 
         protected override void Initialize()
@@ -51,6 +55,8 @@ namespace Schizofascism.Desktop
             t_windowSize = new Vector2(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
             t_bg = Content.Load<Texture2D>("Backgrounds/Ray");
             t_mc = Content.Load<Texture2D>("Sprites/MainChar");
+
+            _batcher = new MgPrimitiveBatcher(GraphicsDevice, t_sf_font);
         }
 
         protected override void Update(GameTime gameTime)
@@ -88,6 +94,10 @@ namespace Schizofascism.Desktop
             }
 
             _spriteBatch.End();
+
+            //_batcher.FillCircle(new Vector2(30), 20.23f, new Color(Color.LemonChiffon, 0.4f), 10);
+            _batcher.FillRoundedRect(new System.Drawing.RectangleF(10, 10, 100, 100), 25f, ((int)System.Math.Sqrt(25)), new Color(Color.LemonChiffon, 0.4f));
+            _batcher.Flush();
 
             base.Draw(gameTime);
         }
