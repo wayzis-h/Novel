@@ -15,7 +15,6 @@ namespace Schizofascism.Desktop.Graphics
     public class MgPrimitiveBatcher : PrimitiveBatcherBase<VertexPositionColorTexture, Matrix, Texture2D>
     {
         private readonly GraphicsDevice _graphicsDevice;
-        private readonly SpriteBatch _spriteBatch;
         private readonly SpriteFont _font;
 
         private readonly BasicEffect _basicEffect;
@@ -25,15 +24,17 @@ namespace Schizofascism.Desktop.Graphics
         private readonly VertexBuffer _vb;
         private readonly IndexBuffer _ib;
 
+        public SpriteBatch SpriteBatcher { get; init; }
         public Texture2D BlankTexture { get; }
         public Texture2D EmptyTexture { get; }
+        public Point WindowSize { get; }
 
         public MgPrimitiveBatcher(GraphicsDevice gd, SpriteFont font)
         {
             _graphicsDevice = gd ?? throw new ArgumentNullException(nameof(gd));
             _font = font ?? throw new ArgumentNullException(nameof(font));
 
-            _spriteBatch = new SpriteBatch(gd);
+            SpriteBatcher = new SpriteBatch(gd);
             _basicEffect = new BasicEffect(gd)
             {
                 VertexColorEnabled = true,
@@ -65,6 +66,8 @@ namespace Schizofascism.Desktop.Graphics
             Texture = BlankTexture;
 
             FontTexture = _font.Texture;
+
+            WindowSize = gd.Viewport.Bounds.Size;
 
             var viewport = gd.Viewport;
             TransformMatrix = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1);
@@ -114,24 +117,24 @@ namespace Schizofascism.Desktop.Graphics
 
         public override void DrawString(string text, Vector2 position, float size, Color color)
         {
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
-            _spriteBatch.End();
+            SpriteBatcher.Begin();
+            SpriteBatcher.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
+            SpriteBatcher.End();
         }
 
         public override void DrawString(StringBuilder text, Vector2 position, float size, Color color)
         {
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
-            _spriteBatch.End();
+            SpriteBatcher.Begin();
+            SpriteBatcher.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
+            SpriteBatcher.End();
         }
 
         public override void DrawStringCropped(string text, Vector2 position, Rectangle area, float size, Color color)
         {
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, depthStencilState: _maskStencilState);
-            _spriteBatch.Draw(EmptyTexture, area, Color.Transparent);
-            _spriteBatch.End();
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, depthStencilState: _spriteStencilState);
+            SpriteBatcher.Begin(sortMode: SpriteSortMode.Immediate, depthStencilState: _maskStencilState);
+            SpriteBatcher.Draw(EmptyTexture, area, Color.Transparent);
+            SpriteBatcher.End();
+            SpriteBatcher.Begin(sortMode: SpriteSortMode.Immediate, depthStencilState: _spriteStencilState);
             Vector2 ts;
             Vector2 pos = position /*t_windowSize / 2*/;
             foreach (var line in text.Split(new[] { '\n' }))
@@ -139,9 +142,9 @@ namespace Schizofascism.Desktop.Graphics
                 ts = _font.MeasureString(line);
                 //pos.Y += ts.Y - 4;
                 //_spriteBatch.Draw(BlankTexture, new Rectangle(pos.ToPoint(), ts.ToPoint()), new Color(new Vector4(0.3f)));
-                _spriteBatch.DrawString(_font, line, pos, Color.White);
+                SpriteBatcher.DrawString(_font, line, pos, Color.White);
             }
-            _spriteBatch.End();
+            SpriteBatcher.End();
             /*_spriteBatch.Begin();
             _spriteBatch.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
             _spriteBatch.End();*/
@@ -149,9 +152,9 @@ namespace Schizofascism.Desktop.Graphics
 
         public override void DrawStringCropped(StringBuilder text, Vector2 position, Rectangle area, float size, Color color)
         {
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
-            _spriteBatch.End();
+            SpriteBatcher.Begin();
+            SpriteBatcher.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
+            SpriteBatcher.End();
         }
     }
 }
