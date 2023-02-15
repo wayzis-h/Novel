@@ -20,14 +20,15 @@ namespace Schizofascism.Desktop.Graphics.Controls
             : base(primitiveBatcher, position)
         {
             _text = new TextBox(string.Empty, primitiveBatcher, position);
+            PlacementChanged += (s, e) => _text.Placement = Placement;
         }
 
         public event EventHandler<EventArgs> Clicked;
 
         public override void Draw(GameTime gameTime)
         {
-            _batcher.FillRect(_position.ToRectangleF(), _isMouseOver ? Color.Aqua : Color.Black);
-            _batcher.DrawRect(_position.ToRectangleF(), Color.Gray);
+            _batcher.FillRect(_placement.ToRectangleF(), _isMouseOver ? Color.Aqua : Color.Black);
+            _batcher.DrawRect(_placement.ToRectangleF(), Color.Gray);
             _batcher.Flush();
 
             _text.Draw(gameTime);
@@ -36,7 +37,7 @@ namespace Schizofascism.Desktop.Graphics.Controls
         public override void Update(GameTime gameTime)
         {
             var state = Mouse.GetState();
-            if (_position.Contains(state.Position))
+            if (_placement.Contains(state.Position))
             {
                 _isMouseOver = true;
                 if (_prevState.LeftButton == ButtonState.Pressed && state.LeftButton == ButtonState.Released)

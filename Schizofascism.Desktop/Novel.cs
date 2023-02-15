@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Schizofascism.Desktop.Graphics;
 using Schizofascism.Desktop.Graphics.Controls;
+using System.Collections.Generic;
 
 namespace Schizofascism.Desktop
 {
@@ -23,6 +24,7 @@ namespace Schizofascism.Desktop
         private Texture2D t_bg;
         private MouseState t_prewState;
         private Texture2D t_mc;
+        private Grid t_grid;
         private Image t_background;
         private Button t_exit;
 
@@ -66,11 +68,21 @@ namespace Schizofascism.Desktop
 
             _batcher = new MgPrimitiveBatcher(GraphicsDevice, t_sf_font);
             t_background = new Image(t_bg, _batcher, new Rectangle(0, 0, 50, 80));
-            t_exit = new Button(_batcher, new Rectangle(120, 5, 90, 60))
+            t_exit = new Button(_batcher, new Rectangle(120, 5, 30, 26))
             {
                 Text = "Выход"
             };
             t_exit.Clicked += (s, a) => Exit();
+            t_grid = new Grid(_batcher, new Rectangle(0, 0, 200, 200))
+            {
+                Columns = { new GridUnit(), new GridUnit() },
+                Rows = { new GridUnit(), new GridUnit() },
+                Children =
+                {
+                    new GridChild() { Control = t_background, Column = 0 },
+                    new GridChild() { Control = t_exit, Column = 1 },
+                },
+            };
         }
 
         protected override void Update(GameTime gameTime)
@@ -85,7 +97,8 @@ namespace Schizofascism.Desktop
             }
             t_prewState = Mouse.GetState();
 
-            t_exit.Update(gameTime);
+            //t_exit.Update(gameTime);
+            t_grid.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -96,13 +109,10 @@ namespace Schizofascism.Desktop
 
             // TODO: Add your drawing code here
 
-            //_batcher.FillCircle(new Vector2(30), 20.23f, new Color(Color.LemonChiffon, 0.4f), 10);
-            t_background.Draw(gameTime);
-            _batcher.FillRoundedRect(new System.Drawing.RectangleF(10, 10, 100, 100), 25f, ((int)System.Math.Sqrt(25)), new Color(Color.LemonChiffon, 0.4f));
-            t_exit.Draw(gameTime);
+            t_grid.Draw(gameTime);
             _batcher.Flush();
 
-
+            //this.Window.
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap);
             _spriteBatch.Draw(t_mc, new Rectangle(t_prewState.Position, new Point(77 * 2, 220 * 2)), new Rectangle(Point.Zero, new Point(77, 220)), Color.White);
             _spriteBatch.End();

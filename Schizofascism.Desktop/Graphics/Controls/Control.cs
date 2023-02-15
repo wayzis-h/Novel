@@ -61,18 +61,33 @@ namespace Schizofascism.Desktop.Graphics.Controls
         }
         private bool _visible;
 
+        public Rectangle Placement
+        {
+            get => _placement;
+            set
+            {
+                if (_placement != value)
+                {
+                    _placement = value;
+                    PlacementChanged?.Invoke(this, new EventArgs());
+                }
+            }
+        }
+        protected Rectangle _placement;
+
         protected MgPrimitiveBatcher _batcher;
-        protected Rectangle _position;
 
         public virtual event EventHandler<EventArgs> DrawOrderChanged;
         public virtual event EventHandler<EventArgs> VisibleChanged;
         public virtual event EventHandler<EventArgs> EnabledChanged;
         public virtual event EventHandler<EventArgs> UpdateOrderChanged;
+        public virtual event EventHandler<EventArgs> PlacementChanged;
+
 
         public Control(MgPrimitiveBatcher primitiveBatcher, Rectangle position)
         {
             _batcher = primitiveBatcher;
-            _position = position;
+            _placement = position;
         }
 
         public abstract void Draw(GameTime gameTime);

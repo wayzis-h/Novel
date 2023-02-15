@@ -16,7 +16,7 @@ namespace Schizofascism.Desktop.Graphics.Controls
         public override void Draw(GameTime gameTime)
         {
             _batcher.SpriteBatcher.Begin();
-            _batcher.SpriteBatcher.Draw(_texture, _position, Color.White);
+            _batcher.SpriteBatcher.Draw(_texture, _placement, Color.White);
             _batcher.SpriteBatcher.End();
         }
 

@@ -13,11 +13,12 @@ namespace Schizofascism.Desktop.Graphics.Controls
         {
             Text = text;
             _vectorPosition = position.Location.ToVector2();
+            PlacementChanged += (s, e) => _vectorPosition = Placement.Location.ToVector2();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            _batcher.DrawStringCropped(Text, _vectorPosition, _position, 10, Color.White);
+            _batcher.DrawStringCropped(Text, _vectorPosition, _placement, 10, Color.White);
         }
 
         public override void Update(GameTime gameTime)
