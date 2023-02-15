@@ -24,6 +24,7 @@ namespace Schizofascism.Desktop
         private Texture2D t_bg;
         private MouseState t_prewState;
         private Texture2D t_mc;
+        private Screen t_screen;
         private Grid t_grid;
         private Image t_background;
         private Button t_exit;
@@ -33,6 +34,7 @@ namespace Schizofascism.Desktop
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            Window.AllowUserResizing = true;
             _graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
 #if !DEBUG
             _graphics.IsFullScreen = true;
@@ -79,9 +81,28 @@ namespace Schizofascism.Desktop
                 Rows = { new GridUnit(), new GridUnit() },
                 Children =
                 {
-                    new GridChild() { Control = t_background, Column = 0 },
+                    //new GridChild() { Control = t_background, Column = 0 },
                     new GridChild() { Control = t_exit, Column = 1 },
                 },
+            };
+            t_screen = new Screen(_batcher, new Rectangle(Point.Zero, Window.ClientBounds.Size))
+            {
+                Children = { t_background, t_grid },
+            };
+            Window.ClientSizeChanged += (s, e) =>
+            {
+                t_screen.Placement = new Rectangle(Point.Zero, Window.ClientBounds.Size);
+                _batcher.TransformMatrix = Matrix.CreateOrthographicOffCenter(
+                    0,
+                    GraphicsDevice.Viewport.Width,
+                    GraphicsDevice.Viewport.Height,
+                    0,
+                    0,
+                    1);
+            };
+            t_screen.PlacementChanged += (s, e) =>
+            {
+                t_grid.Placement = t_background.Placement = t_screen.Placement;
             };
         }
 
@@ -98,7 +119,7 @@ namespace Schizofascism.Desktop
             t_prewState = Mouse.GetState();
 
             //t_exit.Update(gameTime);
-            t_grid.Update(gameTime);
+            t_screen.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -109,7 +130,7 @@ namespace Schizofascism.Desktop
 
             // TODO: Add your drawing code here
 
-            t_grid.Draw(gameTime);
+            t_screen.Draw(gameTime);
             _batcher.Flush();
 
             //this.Window.

@@ -38,8 +38,36 @@ namespace Schizofascism.Desktop.Graphics.Controls
         {
             Children = new ObservableCollection<GridChild>();
             Children.CollectionChanged += Children_CollectionChanged;
+            PlacementChanged += Grid_PlacementChanged;
             Columns = new List<GridUnit>();
             Rows = new List<GridUnit>();
+        }
+
+        private void Grid_PlacementChanged(object sender, System.EventArgs e)
+        {
+            foreach (var child in Children)
+            {
+                var updatedPosition = new Rectangle();
+                if (child.Column == 0)
+                {
+                    updatedPosition.X = Placement.X;
+                }
+                else
+                {
+                    updatedPosition.X = Placement.X + Placement.Width / 2;
+                }
+                updatedPosition.Width = Placement.Width / 2;
+                if (child.Row == 0)
+                {
+                    updatedPosition.Y = Placement.Y;
+                }
+                else
+                {
+                    updatedPosition.Y = Placement.Y + Placement.Height / 2;
+                }
+                updatedPosition.Height = Placement.Height / 2;
+                child.Control.Placement = updatedPosition;
+            }
         }
 
         private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
