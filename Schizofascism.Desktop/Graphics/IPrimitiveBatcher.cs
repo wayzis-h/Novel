@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Color = Microsoft.Xna.Framework.Color;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 /*\ 
  * Based on:
@@ -35,7 +36,10 @@ namespace Schizofascism.Desktop.Graphics
         void FillCircle(Vector2 center, float radius, Color color, int sides);
         void FillCircleSegment(Vector2 center, float radius, float start, float end, Color color, int sides);
 
+        void DrawString(string text, Vector2 position, float size, Color color);
         void DrawString(StringBuilder text, Vector2 position, float size, Color color);
+        void DrawStringCropped(string text, Vector2 position, Rectangle area, float size, Color color);
+        void DrawStringCropped(StringBuilder text, Vector2 position, Rectangle area, float size, Color color);
 
         void Clear();
         void Flush();

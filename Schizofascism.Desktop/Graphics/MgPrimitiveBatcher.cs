@@ -19,11 +19,14 @@ namespace Schizofascism.Desktop.Graphics
         private readonly SpriteFont _font;
 
         private readonly BasicEffect _basicEffect;
+        private readonly DepthStencilState _maskStencilState;
+        private readonly DepthStencilState _spriteStencilState;
 
         private readonly VertexBuffer _vb;
         private readonly IndexBuffer _ib;
 
         public Texture2D BlankTexture { get; }
+        public Texture2D EmptyTexture { get; }
 
         public MgPrimitiveBatcher(GraphicsDevice gd, SpriteFont font)
         {
@@ -38,9 +41,27 @@ namespace Schizofascism.Desktop.Graphics
                 TextureEnabled = true,
                 FogEnabled = false,
             };
+            _maskStencilState = new DepthStencilState
+            {
+                StencilEnable = true,
+                StencilFunction = CompareFunction.Always,
+                StencilPass = StencilOperation.Replace,
+                ReferenceStencil = 1,
+                DepthBufferEnable = false,
+            };
+            _spriteStencilState = new DepthStencilState
+            {
+                StencilEnable = true,
+                StencilFunction = CompareFunction.LessEqual,
+                StencilPass = StencilOperation.Keep,
+                ReferenceStencil = 1,
+                DepthBufferEnable = false,
+            };
 
             BlankTexture = new Texture2D(gd, 1, 1);
             BlankTexture.SetData(new[] {Color.White.PackedValue});
+            EmptyTexture = new Texture2D(gd, 1, 1);
+            EmptyTexture.SetData(new[] { Color.Transparent.PackedValue });
             Texture = BlankTexture;
 
             FontTexture = _font.Texture;
@@ -91,7 +112,42 @@ namespace Schizofascism.Desktop.Graphics
                 0, indexOffset, indexCount / 3);
         }
 
+        public override void DrawString(string text, Vector2 position, float size, Color color)
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
+            _spriteBatch.End();
+        }
+
         public override void DrawString(StringBuilder text, Vector2 position, float size, Color color)
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
+            _spriteBatch.End();
+        }
+
+        public override void DrawStringCropped(string text, Vector2 position, Rectangle area, float size, Color color)
+        {
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, depthStencilState: _maskStencilState);
+            _spriteBatch.Draw(EmptyTexture, area, Color.Transparent);
+            _spriteBatch.End();
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, depthStencilState: _spriteStencilState);
+            Vector2 ts;
+            Vector2 pos = position /*t_windowSize / 2*/;
+            foreach (var line in text.Split(new[] { '\n' }))
+            {
+                ts = _font.MeasureString(line);
+                //pos.Y += ts.Y - 4;
+                //_spriteBatch.Draw(BlankTexture, new Rectangle(pos.ToPoint(), ts.ToPoint()), new Color(new Vector4(0.3f)));
+                _spriteBatch.DrawString(_font, line, pos, Color.White);
+            }
+            _spriteBatch.End();
+            /*_spriteBatch.Begin();
+            _spriteBatch.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));
+            _spriteBatch.End();*/
+        }
+
+        public override void DrawStringCropped(StringBuilder text, Vector2 position, Rectangle area, float size, Color color)
         {
             _spriteBatch.Begin();
             _spriteBatch.DrawString(_font, text, new Vector2(position.X, position.Y), new Color(color.PackedValue));

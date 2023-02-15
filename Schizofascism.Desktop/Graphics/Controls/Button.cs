@@ -4,88 +4,36 @@ using System;
 
 namespace Schizofascism.Desktop.Graphics.Controls
 {
-    public class Button : IUpdateable, IDrawable
+    public class Button : Control
     {
-        public bool Enabled
+        public string Text
         {
-            get => _enabled;
-            set
-            {
-                if (_enabled != value)
-                {
-                    _enabled = value;
-                    EnabledChanged?.Invoke(this, new EventArgs());
-                }
-            }
+            get => _text.Text;
+            set => _text.Text = value;
         }
-        private bool _enabled;
 
-        public int UpdateOrder
-        {
-            get => _updateOrder;
-            set
-            {
-                if (_updateOrder != value)
-                {
-                    _updateOrder = value;
-                    UpdateOrderChanged?.Invoke(this, new EventArgs());
-                }
-            }
-        }
-        private int _updateOrder;
-
-        public int DrawOrder
-        {
-            get => _drawOrder;
-            set
-            {
-                if (_drawOrder != value)
-                {
-                    _drawOrder = value;
-                    DrawOrderChanged?.Invoke(this, new EventArgs());
-                }
-            }
-        }
-        private int _drawOrder;
-
-        public bool Visible
-        {
-            get => _visible;
-            set
-            {
-                if (_visible != value)
-                {
-                    _visible = value;
-                    VisibleChanged?.Invoke(this, new EventArgs());
-                }
-            }
-        }
-        private bool _visible;
-
-        private MgPrimitiveBatcher _batcher;
-        private Rectangle _position;
+        private TextBox _text;
         private MouseState _prevState;
         private bool _isMouseOver;
 
         public Button(MgPrimitiveBatcher primitiveBatcher, Rectangle position)
+            : base(primitiveBatcher, position)
         {
-            _batcher = primitiveBatcher;
-            _position = position;
+            _text = new TextBox(string.Empty, primitiveBatcher, position);
         }
 
-        public event EventHandler<EventArgs> EnabledChanged;
-        public event EventHandler<EventArgs> UpdateOrderChanged;
-        public event EventHandler<EventArgs> DrawOrderChanged;
-        public event EventHandler<EventArgs> VisibleChanged;
         public event EventHandler<EventArgs> Clicked;
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             _batcher.FillRect(_position.ToRectangleF(), _isMouseOver ? Color.Aqua : Color.Black);
             _batcher.DrawRect(_position.ToRectangleF(), Color.Gray);
+            _batcher.Flush();
+
+            _text.Draw(gameTime);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             var state = Mouse.GetState();
             if (_position.Contains(state.Position))

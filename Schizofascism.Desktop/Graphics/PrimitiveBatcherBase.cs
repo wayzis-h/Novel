@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Color = Microsoft.Xna.Framework.Color;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 /*\ 
  * Based on:
@@ -271,7 +272,10 @@ namespace Schizofascism.Desktop.Graphics
             FillTriangleFan(center, ps, color);
         }
 
+        public abstract void DrawString(string text, Vector2 position, float size, Color color);
         public abstract void DrawString(StringBuilder text, Vector2 position, float size, Color color);
+        public abstract void DrawStringCropped(string text, Vector2 position, Rectangle area, float size, Color color);
+        public abstract void DrawStringCropped(StringBuilder text, Vector2 position, Rectangle area, float size, Color color);
 
         private static IEnumerable<Vector2> CreateCircleSegment(Vector2 center, float radius, int sides, float start, float end)
         {
